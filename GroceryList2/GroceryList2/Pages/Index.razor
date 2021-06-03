@@ -1,7 +1,70 @@
 ﻿@page "/"
 
+@using OH.UI.GroceryList
+
+@inject IShoppingListService _shoppingService;
+
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
 
+<br />
+
+<input type="text" @bind="UserId" />
+<input type="button" value="Update Shopping List" @onclick="HandleUpdateShoppingListClick" />
+
+
+<br />
+This is the Shopping List
+
+
+@if (ShoppingList.Count == 0)
+{
+    <h2>Sorry. Nothing to display.</h2>
+}
+else
+{
+
+    <ul>
+        @foreach (var item in ShoppingList)
+        {
+            <li>@item</li>
+        }
+    </ul>
+}
+
+
+
 <SurveyPrompt Title="How is Blazor working for you?" />
+
+<SurveyPrompt Title="This is another value" />
+
+@code
+{
+    public string UserId { get; set; }
+    public List<string> ShoppingList { get; set; } = new List<string>();
+
+    protected async override Task OnInitializedAsync()
+    {
+        ShoppingList = await _shoppingService.GetShoppingList();
+    }
+
+    private async Task HandleUpdateShoppingListClick()
+    {
+
+        int userId = 0;
+
+        int.TryParse(UserId, out userId);
+
+        if (userId == 0)
+        {
+            ShoppingList = new List<string>();
+        }
+        else
+        {
+            ShoppingList = await _shoppingService.GetShoppingListByUser(userId);
+        }
+
+
+    }
+}
