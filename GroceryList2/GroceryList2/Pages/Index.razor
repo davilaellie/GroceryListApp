@@ -1,70 +1,133 @@
 ﻿@page "/"
 
 @using OH.UI.GroceryList
+@using OH.Common.GroceryList
 
 @inject IShoppingListService _shoppingService;
 
 <h1>Hello, world!</h1>
 
-Welcome to your new app.
+Welcome to your grocery app.
 
 <br />
 
 <input type="text" @bind="UserId" />
-<input type="button" value="Update Shopping List" @onclick="HandleUpdateShoppingListClick" />
+<input type="button" value="Find User" @onclick="HandleUpdateShoppingListClick" />
 
 
 <br />
-This is the Shopping List
+Shopping List:
 
 
 @if (ShoppingList.Count == 0)
 {
-    <h2>Sorry. Nothing to display.</h2>
+    <h3>Sorry. Nothing to display.</h3>
 }
 else
 {
+    <table>
+        <thead>
+            <tr>
+                <th>Grocery Item</th>
+                <th>Amount of Item</th>
+                <th>Remove Item</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var thing in ShoppingList)
+                {
+            <tr>
+                <td>@thing.Key</td>
+                <td>@thing.Value</td>
+                <!--<td><input type="button" value="Remove" @onclick="HandleRemoveShoppingListClick" /></td>-->
+                
+            </tr>
+                }
+            
+        </tbody>     
+        
+    </table>    
 
-    <ul>
-        @foreach (var item in ShoppingList)
-        {
-            <li>@item</li>
-        }
-    </ul>
 }
 
+<br />
 
+Add a new Item:
 
-<SurveyPrompt Title="How is Blazor working for you?" />
+<br />
 
-<SurveyPrompt Title="This is another value" />
+<span>
+    Item Name: <input type="text" @bind="Item" />
+</span>
+
+<span>
+    Item Amount: <input type="number" @bind="Amount" />
+</span>
+
+<input type="button" value="Submit" @onclick="AddItemShoppingListClick" />
+
 
 @code
 {
-    public string UserId { get; set; }
-    public List<string> ShoppingList { get; set; } = new List<string>();
+
+    public int UserId { get; set; }
+    public string Item { get; set; }
+    public string Amount { get; set; }
+
+
+    private List<User> userList;
+
+
+
+
+    public Dictionary<string, int> ShoppingList { get; set; } = new Dictionary<string, int>();
 
     protected async override Task OnInitializedAsync()
     {
         ShoppingList = await _shoppingService.GetShoppingList();
+
+        userList = await _shoppingService.GetShoppingUserList();
     }
 
     private async Task HandleUpdateShoppingListClick()
     {
-
+       
         int userId = 0;
 
-        int.TryParse(UserId, out userId);
+        
 
         if (userId == 0)
         {
-            ShoppingList = new List<string>();
+            ShoppingList = new Dictionary<string, int>();
         }
         else
         {
             ShoppingList = await _shoppingService.GetShoppingListByUser(userId);
+        } 
+
+
+    }
+    private async Task AddItemShoppingListClick()
+    {
+        int userId = 0;
+        string item = "";
+        int amount = 0;
+
+        
+
+        int.TryParse(Amount, out amount);
+
+        if (userId == 0)
+        {
+            ShoppingList = new Dictionary<string, int>();
+        }
+        else
+        {
+            ShoppingList = await _shoppingService.AddShoppingListItem(userId, item, amount);
         }
 
 
     }
+
+
 }

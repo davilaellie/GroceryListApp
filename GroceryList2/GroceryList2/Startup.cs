@@ -52,6 +52,7 @@ namespace GroceryList2
                 app.UseHsts();
             }
 
+            // This is middleware.
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

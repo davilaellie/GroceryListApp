@@ -2,10 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <AssemblyName>OH.Common.GroceryList</AssemblyName>
+    <RootNamespace>OH.Common.GroceryList</RootNamespace>
   </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\OH.Common.GroceryList2\OH.Common.GroceryList.csproj" />
-  </ItemGroup>
 
 </Project>

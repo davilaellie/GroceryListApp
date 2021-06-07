@@ -29,7 +29,7 @@ namespace OH.Service.GroceryList
 
             services.AddControllers();
             services.AddScoped<IShoppingListService, ShoppingListService>();
-            //services.AddScoped<IShoppingListService, SuperFancyShoppingList>();
+            // services.AddScoped<IShoppingListService, SuperFancyShoppingList>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

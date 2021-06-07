@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OH.Common.GroceryList;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,12 +9,26 @@ namespace OH.Business.GroceryList
 {
     public class SuperFancyShoppingList : IShoppingListService
     {
-        public List<string> GetShoppingList()
+        public Dictionary<string, int> GetShoppingList()
         {
-            return new List<string>() { "I don't have anything here" };
+            return new Dictionary<string, int>() { { "I don't have anything here", 0 } };
         }
 
-        public List<string> GetShoppingListByUser(int userId)
+        public Dictionary<string, int> GetShoppingListByUser(int userId)
+        {
+            throw new NotImplementedException();
+        }
+        public Dictionary<string, int> AddShoppingListItem(int userId, string item, int amount)
+        {
+            throw new NotImplementedException();
+        }
+
+        Dictionary<string, Dictionary<string, int>> IShoppingListService.GetShoppingList()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<User> GetShoppingUserList()
         {
             throw new NotImplementedException();
         }

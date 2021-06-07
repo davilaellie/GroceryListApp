@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OH.Business.GroceryList;
+using OH.Common.GroceryList;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,19 +33,52 @@ namespace OH.Service.GroceryList.Controllers
         {
             _shoppingListService = shoppingListService;
         }
-
+        
         [HttpGet]
-        public IEnumerable<string> Get(int userId = 0)
+        
+        public IEnumerable<Dictionary<string, int>> Get(int userId = 0)
         {
             if (userId == 0)
             {
-                return _shoppingListService.GetShoppingList();
+                // **ASK ABOUT CASTING HERE! Why is this needing an explicit cast? I think that it is 
+                // returning a Dictionary<string, Dictionary<string, int>
+                return (IEnumerable<Dictionary<string, int>>)_shoppingListService.GetShoppingList();
             }
             else
             {
-                return _shoppingListService.GetShoppingListByUser(userId);
+                return (IEnumerable<Dictionary<string, int>>)_shoppingListService.GetShoppingListByUser(userId);
             }
             
+        } 
+
+        [HttpGet]
+
+        public IEnumerable<User> Get1(int userId = 0)
+        {
+            if (userId == 0)
+            {
+                // **ASK ABOUT CASTING HERE! Why is this needing an explicit cast? I think that it is 
+                // returning a Dictionary<string, Dictionary<string, int>
+                return _shoppingListService.GetShoppingUserList();
+            }
+            //else
+            //{
+            //    return _shoppingListService.GetShoppingListByUser(userId);
+            //}
+            return new List<User>();
+        }
+
+        [HttpPost]
+        public IEnumerable<Dictionary<string, int>> Post(int userId = 0, string item = "", int amount = 0)
+        {
+            if (userId != 0)
+            {
+                return (IEnumerable<Dictionary<string, int>>)_shoppingListService.AddShoppingListItem(userId, item, amount);
+            }
+            else
+            {
+                return (IEnumerable<Dictionary<string, int>>)_shoppingListService.GetShoppingList();
+            }
         }
     }
 }
