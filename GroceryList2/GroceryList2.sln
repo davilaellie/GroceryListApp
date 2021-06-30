@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OH.Business.GroceryList", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OH.Common.GroceryList", "OH.Common.GroceryList2\OH.Common.GroceryList.csproj", "{88EC4053-D9BB-4CCD-9474-06B69C173DC6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OH.SQLiteDatabase", "OH.SQLiteDatabase\OH.SQLiteDatabase.csproj", "{B53FE06F-A893-447C-AE3E-1DE8FD926E7A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{88EC4053-D9BB-4CCD-9474-06B69C173DC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88EC4053-D9BB-4CCD-9474-06B69C173DC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88EC4053-D9BB-4CCD-9474-06B69C173DC6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B53FE06F-A893-447C-AE3E-1DE8FD926E7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B53FE06F-A893-447C-AE3E-1DE8FD926E7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B53FE06F-A893-447C-AE3E-1DE8FD926E7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B53FE06F-A893-447C-AE3E-1DE8FD926E7A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

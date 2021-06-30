@@ -1,0 +1,74 @@
+﻿@page "/newuser"
+
+@using OH.UI.GroceryList
+@using OH.Common.GroceryList.Models
+@using State
+
+@inject NavigationManager NavManager
+@inject IShoppingListService _shoppingService
+@inject IUserService _userService
+
+<h1 style="text-align:center" class="NewUserCreation">Create a New User</h1>
+
+<legend style="text-align:center">New User Form</legend>
+
+<div class="NewUserCreation">
+    
+    <div class="form-row">
+        <div class="form-item">
+            <label for="UserFirstName">First Name:</label>
+            <input type="text" @bind="Person.Name" />
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-item">
+            <label for="LastName">Last Name:</label>
+            <input type="text" @bind="Person.LastName" />
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-item">
+            <label for="Email">Email:</label>
+            <input type="text" @bind="Person.Email" />
+        </div>
+    </div>
+</div>
+<div class="form-row form-row-right btn-row">
+    <button class="btn btn-primary" @onclick="CreateUser">Create User</button>
+</div>    
+    
+
+
+@code {
+    public User Person { get; set; } = new User();
+    public string ErrorMessage { get; set; }
+    public List<ShoppingList> UserList { get; set; } = new List<ShoppingList>();
+
+    private async Task CreateUser()
+    {
+        if (string.IsNullOrWhiteSpace(Person.Name))
+        {
+            ErrorMessage = "Please enter a name.";
+            return;
+        }
+
+        ClientState.Person = await _userService.AddUser(Person);
+        try
+        {
+            if (Person.Name != null)
+            {
+                ClientState.ShoppingListItems = await _shoppingService.GetShoppingListByUser(ClientState.Person.Id);
+                UserList = ClientState.ShoppingListItems;
+                NavManager.NavigateTo("/profile");
+            }
+
+        }
+        catch
+        {
+            ErrorMessage = "Something went wrong while adding your profile. Please try again.";
+        }
+    }
+}
+}

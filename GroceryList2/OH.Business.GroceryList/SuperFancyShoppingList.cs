@@ -1,4 +1,5 @@
 ﻿using OH.Common.GroceryList;
+using OH.Common.GroceryList.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,26 +10,32 @@ namespace OH.Business.GroceryList
 {
     public class SuperFancyShoppingList : IShoppingListService
     {
-        public Dictionary<string, int> GetShoppingList()
-        {
-            return new Dictionary<string, int>() { { "I don't have anything here", 0 } };
-        }
-
-        public Dictionary<string, int> GetShoppingListByUser(int userId)
-        {
-            throw new NotImplementedException();
-        }
-        public Dictionary<string, int> AddShoppingListItem(int userId, string item, int amount)
+        public Task<List<User>> GetShoppingList()
         {
             throw new NotImplementedException();
         }
 
-        Dictionary<string, Dictionary<string, int>> IShoppingListService.GetShoppingList()
+        public Task<List<ShoppingList>> GetShoppingListByUser(int userId)
+        {
+            throw new NotImplementedException();
+        }
+        public Task<List<ShoppingList>> AddShoppingListItem(ShoppingList newListEntry)
         {
             throw new NotImplementedException();
         }
 
-        public List<User> GetShoppingUserList()
+        Task<List<User>> IShoppingListService.GetShoppingList()
+        {
+            return null;
+            //throw new NotImplementedException();
+        }
+
+        public Task<List<User>> GetShoppingUserList()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<ShoppingList>> RemoveShoppingListItem(ShoppingList listRemovalItem)
         {
             throw new NotImplementedException();
         }

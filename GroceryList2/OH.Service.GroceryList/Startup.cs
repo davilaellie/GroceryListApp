@@ -2,11 +2,14 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using OH.Business.GroceryList;
+using OH.Business.GroceryList.Database;
+using OH.Common.GroceryList.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +32,9 @@ namespace OH.Service.GroceryList
 
             services.AddControllers();
             services.AddScoped<IShoppingListService, ShoppingListService>();
+            services.AddScoped<IUserService, UserService>();
+          
+            services.AddDbContext<PeopleSQLitedbContext>(options => options.UseSqlite("DataSource=C:\\sqlite\\Grocery\\PeopleSQLiteDb.db"));
             // services.AddScoped<IShoppingListService, SuperFancyShoppingList>();
         }
 

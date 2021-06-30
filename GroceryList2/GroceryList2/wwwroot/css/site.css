@@ -1,9 +1,40 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+@import url('form.css');
+
 
 html, body {
+    margin: 0;
+    padding: 0;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
+.main-header {
+    
+    background-image: url("groceryheader.jpg");
+    background-size: cover;
+    padding-bottom: 15px;
+    
+    text-align: center;
+}
+
+.main-h1 {
+    background-color:white;
+    
+    color: darkolivegreen;
+    
+    
+}
+
+.NewUserCreation {
+    border-radius: 25px;
+    border: 2px solid #000000;
+    text-align: center
+}
+
+h3 {
+    border: none;
+
+}
 a, .btn-link {
     color: #0366d6;
 }

@@ -1,133 +1,107 @@
 ﻿@page "/"
 
 @using OH.UI.GroceryList
-@using OH.Common.GroceryList
+@using OH.Common.GroceryList.Models
+@using OH.Common.GroceryList.ViewModels
+@using State
 
-@inject IShoppingListService _shoppingService;
+@inject IShoppingListService _shoppingService
+@inject IUserService _userService
+@inject NavigationManager NavManager
 
-<h1>Hello, world!</h1>
+<input class="btn btn-success" type="button" name="myBtn" value="Click Here!" @onclick="NavigateToProfilePage" />
+<head>
+    <title>Home Page</title>
+</head>
+<body>
+    <header class="main-header"></header>
+    <h1 style="align-content: center">Welcome to your grocery list</h1>
+    <hr />
+    @if (ClientState.Person == null)
+    {
 
-Welcome to your grocery app.
+        <div class="Login">
 
-<br />
+            <section class="ExistingUser">
+                <h2>Please Enter your User ID:</h2>
 
-<input type="text" @bind="UserId" />
-<input type="button" value="Find User" @onclick="HandleUpdateShoppingListClick" />
+                @*<input type="text" @bind="UserId" />*@
+
+                <input type="text" @bind="Person.Id" />
+                <input type="button" value="Submit" @onclick="GetUserShoppingList" />
+            </section>
+            <br />
+
+            <section class="NewUser">
+                <h3>Or Create a New User Profile:</h3>
+                <div class="form-row form-row-right btn-row">
+                    <button class="btn btn-primary" value="Create New Profile" @onclick="CreateNewUserForm" />
+                </div>
+
+            </section>
+
+        </div>
+    }
+</body>
+<label>@ErrorMessage</label>
 
 
-<br />
-Shopping List:
 
 
-@if (ShoppingList.Count == 0)
-{
-    <h3>Sorry. Nothing to display.</h3>
-}
-else
-{
-    <table>
-        <thead>
-            <tr>
-                <th>Grocery Item</th>
-                <th>Amount of Item</th>
-                <th>Remove Item</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var thing in ShoppingList)
-                {
-            <tr>
-                <td>@thing.Key</td>
-                <td>@thing.Value</td>
-                <!--<td><input type="button" value="Remove" @onclick="HandleRemoveShoppingListClick" /></td>-->
-                
-            </tr>
-                }
-            
-        </tbody>     
-        
-    </table>    
-
-}
-
-<br />
-
-Add a new Item:
-
-<br />
-
-<span>
-    Item Name: <input type="text" @bind="Item" />
-</span>
-
-<span>
-    Item Amount: <input type="number" @bind="Amount" />
-</span>
-
-<input type="button" value="Submit" @onclick="AddItemShoppingListClick" />
 
 
 @code
 {
-
-    public int UserId { get; set; }
-    public string Item { get; set; }
-    public string Amount { get; set; }
-
-
-    private List<User> userList;
+    public User Person { get; set; }
+    public string ErrorMessage { get; set; }
+    public List<ShoppingList> UserList { get; set; }
 
 
-
-
-    public Dictionary<string, int> ShoppingList { get; set; } = new Dictionary<string, int>();
-
-    protected async override Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        ShoppingList = await _shoppingService.GetShoppingList();
-
-        userList = await _shoppingService.GetShoppingUserList();
-    }
-
-    private async Task HandleUpdateShoppingListClick()
-    {
-       
-        int userId = 0;
-
-        
-
-        if (userId == 0)
+        if (ClientState.Person != null)
         {
-            ShoppingList = new Dictionary<string, int>();
+
+            Person = ClientState.Person;
         }
         else
         {
-            ShoppingList = await _shoppingService.GetShoppingListByUser(userId);
-        } 
+            Person = new User();
 
-
+        }
     }
-    private async Task AddItemShoppingListClick()
+
+    private async Task GetUserShoppingList()
     {
-        int userId = 0;
-        string item = "";
-        int amount = 0;
-
-        
-
-        int.TryParse(Amount, out amount);
-
-        if (userId == 0)
+        if (Person.Id <= 0)
         {
-            ShoppingList = new Dictionary<string, int>();
+            ErrorMessage = "This is not a valid ID. Please enter a valid ID or create a new user.";
+            return;
         }
         else
         {
-            ShoppingList = await _shoppingService.AddShoppingListItem(userId, item, amount);
+            ClientState.Person = await _userService.GetUserById(Person.Id);
+            Person = ClientState.Person;
+
+
+
+            ClientState.ShoppingListItems = await _shoppingService.GetShoppingListByUser(Person.Id);
+            UserList = ClientState.ShoppingListItems;
+
+            NavManager.NavigateTo("/profile");
+
         }
-
-
     }
 
+    private void CreateNewUserForm()
+    {
+        NavManager.NavigateTo("/newuser");
+    }
 
+    private void NavigateToProfilePage()
+    {
+        NavManager.NavigateTo("/profile");
+    }
 }
+
+

@@ -2,24 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using OH.Business.GroceryList;
 using OH.Common.GroceryList;
+using OH.Common.GroceryList.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-//REST
-//Resources
-    //CRUD Operations
-//HTTP VERBS
-    //GET, POST, PUT, DELETE, HEAD, PATCH
-
-//ShoppingList
-    //GET
-    //ShoppingList/99
-
-    //POST
-
-
-
 
 namespace OH.Service.GroceryList.Controllers
 {
@@ -36,49 +23,22 @@ namespace OH.Service.GroceryList.Controllers
         
         [HttpGet]
         
-        public IEnumerable<Dictionary<string, int>> Get(int userId = 0)
+        public async Task<IEnumerable<ShoppingList>> Get(int userId)
         {
-            if (userId == 0)
-            {
-                // **ASK ABOUT CASTING HERE! Why is this needing an explicit cast? I think that it is 
-                // returning a Dictionary<string, Dictionary<string, int>
-                return (IEnumerable<Dictionary<string, int>>)_shoppingListService.GetShoppingList();
-            }
-            else
-            {
-                return (IEnumerable<Dictionary<string, int>>)_shoppingListService.GetShoppingListByUser(userId);
-            }
-            
+            return await _shoppingListService.GetShoppingListByUser(userId);    
+
         } 
 
-        [HttpGet]
-
-        public IEnumerable<User> Get1(int userId = 0)
+        [HttpPost]
+        public async Task<IEnumerable<ShoppingList>> Post(ShoppingList newListEntry)
         {
-            if (userId == 0)
-            {
-                // **ASK ABOUT CASTING HERE! Why is this needing an explicit cast? I think that it is 
-                // returning a Dictionary<string, Dictionary<string, int>
-                return _shoppingListService.GetShoppingUserList();
-            }
-            //else
-            //{
-            //    return _shoppingListService.GetShoppingListByUser(userId);
-            //}
-            return new List<User>();
+            return await _shoppingListService.AddShoppingListItem(newListEntry);
         }
 
-        [HttpPost]
-        public IEnumerable<Dictionary<string, int>> Post(int userId = 0, string item = "", int amount = 0)
+        [HttpPut]
+        public async Task<IEnumerable<ShoppingList>> Put(ShoppingList listRemovalItem)
         {
-            if (userId != 0)
-            {
-                return (IEnumerable<Dictionary<string, int>>)_shoppingListService.AddShoppingListItem(userId, item, amount);
-            }
-            else
-            {
-                return (IEnumerable<Dictionary<string, int>>)_shoppingListService.GetShoppingList();
-            }
+            return await _shoppingListService.RemoveShoppingListItem(listRemovalItem);
         }
     }
 }

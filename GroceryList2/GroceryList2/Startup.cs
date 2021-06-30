@@ -31,10 +31,16 @@ namespace GroceryList2
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
             services.AddScoped<IShoppingListService, ShoppingListService>();
+            services.AddScoped<IUserService, UserService>();
 
             services.AddHttpClient("shoppingListAPI", c =>
             {
-                c.BaseAddress = new Uri("https://localhost:44344");
+                c.BaseAddress = new Uri("https://localhost:5011");
+            });
+
+            services.AddHttpClient("userServiceAPI", d =>
+            {
+                d.BaseAddress = new Uri("https://localhost:5011");
             });
         }
 

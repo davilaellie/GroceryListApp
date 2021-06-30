@@ -1,4 +1,5 @@
 ﻿using OH.Common.GroceryList;
+using OH.Common.GroceryList.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,11 @@ namespace OH.UI.GroceryList
 {
     public interface IShoppingListService
     {
-        Task<Dictionary<string, int>> GetShoppingList();
+        Task<List<User>> GetShoppingList();
         Task<List<User>> GetShoppingUserList();
-        Task<Dictionary<string, int>> GetShoppingListByUser(int userId);
-        Task<Dictionary<string, int>> AddShoppingListItem(int userId, string item, int amount);
-        /*Task<Dictionary<string, int>> CreateNewUser(int newUserId);*/
+        Task<List<ShoppingList>> GetShoppingListByUser(int userId);
+        Task<List<ShoppingList>> AddShoppingListItem(ShoppingList newListEntry);
+        Task<List<ShoppingList>> RemoveShoppingListItem(ShoppingList listRemovalItem);
+
     }
 }

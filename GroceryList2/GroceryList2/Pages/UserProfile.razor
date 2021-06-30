@@ -1,0 +1,146 @@
+﻿@page "/profile"
+
+@using State
+@using OH.Common.GroceryList.Models
+@using OH.UI.GroceryList
+
+
+@inject IShoppingListService _shoppingService
+@inject IUserService _userService 
+@inject NavigationManager NavManager
+
+<head>
+    <title>User Profile</title>
+</head>
+<body>
+    <header class="main-header">
+        <nav>
+
+        </nav>
+        <hr />
+        <h1 class="main-h1">Hello @Person.Name</h1>
+    </header>
+
+    <p style="text-align: center">Welcome to your grocery list</p>
+
+    <h4>@Person.Name's Grocery List</h4>
+    <div class="groceryList">
+        <table id="groceryDisplay">
+            <thead>
+                <tr>
+                    <th>Grocery Item</th>
+                    <th>Item Amount</th>
+                    <th>Remove Item</th>
+                </tr>
+
+            </thead>
+            <tbody>
+
+                @foreach (var item in UserList)
+                {
+                <tr>
+                    <td>@item.ItemName</td>
+                    <td >@item.Amount</td>
+                    <td><button class="remove-button" value=@item  @onclick="() => RemoveListItem(item)">Remove Item</button></td>
+
+                </tr>
+
+                }
+                <tr></tr>
+            </tbody>
+        </table>
+
+        <br />
+        <hr />
+        <div class="form-row">
+            <div class="form-item">
+                <label for="NewItem">Item:</label>
+                <input type="text" name="itemName" @bind="NewListEntry.ItemName" />
+            </div>
+            <div class="form-item">
+                <label for="NewAmount">Amount:</label>
+                <input type="number" name="itemAmount" @bind="NewListEntry.Amount" />
+
+            </div>
+        </div>
+
+        <div class="form-row form-row-right btn-row">
+            <button class="btn btn-success" @onclick="AddNewItem">Add an Item</button>
+        </div>
+
+
+
+    </div>
+    <label>@ErrorMessage</label>
+</body>
+
+
+@code {
+    public User Person { get; set; } = ClientState.Person;
+    public string ErrorMessage { get; set; }
+    public List<ShoppingList> UserList { get; set; } = ClientState.ShoppingListItems;
+
+    public ShoppingList NewListEntry { get; set; } = new ShoppingList();
+    public ShoppingList NewListRemoval { get; set; } = new ShoppingList();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (UserList.Count == 0)
+        {
+            ErrorMessage = "You have nothing in your cart. Please Add some items to your Grocery List.";
+            return;
+        }
+
+
+
+
+    }
+    private async Task RemoveListItem(ShoppingList item)
+    {
+        NewListRemoval = item;
+
+        NewListRemoval.UserId = Person.Id;
+
+        ClientState.ShoppingListItems = await _shoppingService.RemoveShoppingListItem(NewListRemoval);
+        UserList = ClientState.ShoppingListItems;
+
+        if (UserList == null)
+        {
+            ErrorMessage = "Sorry, something went wrong with adding an item to your cart.";
+            return;
+        }
+        
+
+    }
+
+    private async Task AddNewItem()
+    {
+        ErrorMessage = "";
+        if (string.IsNullOrWhiteSpace(NewListEntry.ItemName))
+        {
+            ErrorMessage = "Please enter a valid item name.";
+            return;
+        }
+        if (NewListEntry.Amount < 1)
+        {
+            ErrorMessage = "Please enter a valid item amount.";
+            return;
+        }
+
+        NewListEntry.IsDeleted = 0;
+        NewListEntry.UserId = Person.Id;
+
+        ClientState.ShoppingListItems = await _shoppingService.AddShoppingListItem(NewListEntry);
+        UserList = ClientState.ShoppingListItems;
+        if (UserList == null)
+        {
+            ErrorMessage = "Sorry, something went wrong with adding an item to your cart.";
+            return;
+        }
+        NewListEntry.ItemName = null;
+        NewListEntry.Amount = 0;
+
+    }
+
+}
